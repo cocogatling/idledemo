@@ -33,7 +33,7 @@ if (savedGame !== null) {
             (minutes > 0 ? `${minutes}m ` : "") +
             `${seconds}s`;
 
-        alert(`You were away for ${timeAway} and gained ${format(Math.floor(offlineGain))} music!`);
+        alert(`You were away for ${timeAway} and gained ${format(offlineGain)} music!`);
     }
 
     update("musicMade", `${format(gameData.music)} Music Made`);
@@ -110,8 +110,8 @@ function saveGameData() {
 }
 
 function format(number) {
-    return number.toLocaleString("en-US");
-  }
+    return Math.floor(number).toLocaleString("en-US");
+}
 
 // Function to reset the game
 function resetGame() {
