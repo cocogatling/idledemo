@@ -3,8 +3,13 @@ var gameData = {
     music: 0,
     musicPerClick: 1,
     mps: 0,
-    musicBoxes: 0 // Keep track of the number of music boxes
+    musicBoxes: 0, // Keep track of the number of music boxes
+    lastTick: Date.now()
 };
+
+function update(id, content) {
+    document.getElementById(id).innerHTML = content;
+  }
 
 // Load saved game data from localStorage (if any)
 var savedGame = JSON.parse(localStorage.getItem("musicSave"));
@@ -35,37 +40,39 @@ function updateMusicBoxButton() {
 // Function to increase music made
 function makeMusic() {
     gameData.music += gameData.musicPerClick;
-    document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
-    updateMusicBoxButton();  // Update button state whenever music changes
-    saveGameData();  // Save the game state after every music increment
+    update("musicMade", `${format(gameData.music)} Music Made`);
+    updateMusicBoxButton();
+    saveGameData();
 }
 
 // Function to automatically generate music based on mps
 function autoGenerateMusic() {
     gameData.music += gameData.mps;
-    document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
-    document.getElementById("musicAutoMade").textContent = `${gameData.mps} Mps`;
-    document.getElementById("musicBoxesMade").textContent = `${gameData.musicBoxes} Music Boxes`;
-    updateMusicBoxButton();  // Update button state whenever music changes
-    saveGameData();  // Save the game state after auto generation
+    update("musicMade", `${format(gameData.music)} Music Made`);
+    update("musicAutoMade", `${format(gameData.mps)} Mps`);
+    update("musicBoxesMade", `${format(gameData.musicBoxes)} Music Boxes`);
+    updateMusicBoxButton();
+    saveGameData();
 }
 
 // Function to buy a music box (if enough music)
 function musicBox() {
-    if (gameData.music >= 10) {  // Ensure music is at least 10 before subtracting
+    if (gameData.music >= 10) {
         gameData.music -= 10;
         gameData.mps += 1;
-        gameData.musicBoxes += 1;  // Increment the number of music boxes
-        document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
-        document.getElementById("musicAutoMade").textContent = `${gameData.mps} Mps`;
-        document.getElementById("musicBoxesMade").textContent = `${gameData.musicBoxes} Music Boxes`;
-        updateMusicBoxButton();  // Update button state after using music
-        saveGameData();  // Save the game state after purchasing a music box
+        gameData.musicBoxes += 1;
+        update("musicMade", `${format(gameData.music)} Music Made`);
+        update("musicAutoMade", `${format(gameData.mps)} Mps`);
+        update("musicBoxesMade", `${format(gameData.musicBoxes)} Music Boxes`);
+        updateMusicBoxButton();
+        saveGameData();
     }
 }
 
 // Periodically increase music every second
 var mainGameLoop = window.setInterval(function() {
+    diff = Date.now() - gameData.lastTick;
+    gameData.lastTick = Date.now() // Don't forget to update lastTick.
     autoGenerateMusic();
 }, 1000);
 
@@ -78,9 +85,12 @@ function saveGameData() {
     localStorage.setItem("musicSave", JSON.stringify(gameData));  // Save the entire game data object
 }
 
+function format(number) {
+    return number.toLocaleString("en-US");
+  }
+
 // Function to reset the game
 function resetGame() {
-    // Reset all game data to initial values
     gameData = {
         music: 0,
         musicPerClick: 1,
@@ -88,17 +98,11 @@ function resetGame() {
         musicBoxes: 0
     };
 
-    // Update the webpage with reset values
-    document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
-    document.getElementById("musicAutoMade").textContent = `${gameData.mps} Mps`;
-    document.getElementById("musicBoxesMade").textContent = `${gameData.musicBoxes} Music Boxes`;
-
-    // Disable Music Box button if not enough music
+    update("musicMade", `${format(gameData.music)} Music Made`);
+    update("musicAutoMade", `${format(gameData.mps)} Mps`);
+    update("musicBoxesMade", `${format(gameData.musicBoxes)} Music Boxes`);
     updateMusicBoxButton();
-
-    // Clear saved data from localStorage
     localStorage.removeItem("musicSave");
-
     console.log("Game has been reset!");
 }
 
