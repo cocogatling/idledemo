@@ -15,7 +15,7 @@ button {
 }
 
 /* Media query for desktop */
-@media (min-width: 1200px) {
+@media (min-width: 1000px) {
   body {
     font-size: 12px;  /* Set a fixed font size for desktop */
     padding: 20px;
