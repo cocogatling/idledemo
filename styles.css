@@ -15,14 +15,14 @@ button {
 }
 
 /* Media query for desktop */
-@media (min-width: 500px) {
+@media (min-width: 1000px) {
   body {
-    font-size: 100px;  /* Set a fixed font size for desktop */
+    font-size: 14px;  /* Set a fixed font size for desktop */
     padding: 20px;
   }
 
   button {
-    font-size: 100px;  /* Adjust button size for larger screens */
+    font-size: 14px;  /* Adjust button size for larger screens */
     padding: 10px 20px;
     margin: 10px;
   }
