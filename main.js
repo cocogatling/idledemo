@@ -15,7 +15,31 @@ function update(id, content) {
 var savedGame = JSON.parse(localStorage.getItem("musicSave"));
 if (savedGame !== null) {
     console.log("Loaded game data:", savedGame);
-    gameData = savedGame; // Load the saved data into the gameData object
+    gameData = savedGame;
+
+    const now = Date.now();
+    const offlineTime = (now - gameData.lastTick) / 1000; // in seconds
+    const offlineGain = gameData.mps * offlineTime;
+    gameData.music += offlineGain;
+    gameData.lastTick = now;
+
+    if (offlineGain > 0) {
+        // Format time away
+        const seconds = Math.floor(offlineTime % 60);
+        const minutes = Math.floor((offlineTime / 60) % 60);
+        const hours = Math.floor(offlineTime / 3600);
+        const timeAway =
+            (hours > 0 ? `${hours}h ` : "") +
+            (minutes > 0 ? `${minutes}m ` : "") +
+            `${seconds}s`;
+
+        alert(`You were away for ${timeAway} and gained ${format(Math.floor(offlineGain))} music!`);
+    }
+
+    update("musicMade", `${format(gameData.music)} Music Made`);
+    update("musicAutoMade", `${format(gameData.mps)} Mps`);
+    update("musicBoxesMade", `${format(gameData.musicBoxes)} Music Boxes`);
+    updateMusicBoxButton();
 } else {
     console.log("No saved game data found.");
 }
