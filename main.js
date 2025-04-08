@@ -45,3 +45,12 @@ function autoGenerateMusic() {
 
 // Set an interval to increase music every second based on mps
 setInterval(autoGenerateMusic, 1000); // Every 1000 milliseconds (1 second)
+
+var saveGameLoop = window.setInterval(function() {
+    localStorage.setItem("musicSave", JSON.stringify(gameData))
+  }, 15000)
+
+  var savegame = JSON.parse(localStorage.getItem("musicSave"))
+  if (savegame !== null) {
+    gameData = savegame
+  }  
