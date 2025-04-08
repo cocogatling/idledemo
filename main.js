@@ -1,39 +1,47 @@
 var gameData = {
-    gold: 0,
-    goldPerClick: 1,
-    goldPerClickCost: 10
-  }
-  
-  function mineGold() {
-    gameData.gold += gameData.goldPerClick
-    document.getElementById("goldMined").innerHTML = gameData.gold + " Gold Mined"
-  }
-
-  function buyGoldPerClick() {
-    if (gameData.gold >= gameData.goldPerClickCost) {
-      gameData.gold -= gameData.goldPerClickCost
-      gameData.goldPerClick += 1
-      gameData.goldPerClickCost *= 2
-      document.getElementById("goldMined").innerHTML = gameData.gold + " Gold Mined"
-    document.getElementById("perClickUpgrade").innerHTML = "Upgrade Pickaxe (Currently Level " + gameData.goldPerClick + ") Cost: " + gameData.goldPerClickCost + " Gold"
-    }
-  }
-
-var mainGameLoop = window.setInterval(function() {
-  mineGold()
-}, 1000)
-
-var saveGameLoop = window.setInterval(function() {
-  localStorage.setItem("goldMinerSave", JSON.stringify(gameData))
-}, 15000)
-
-var savegame = JSON.parse(localStorage.getItem("goldMinerSave"))
-  if (savegame !== null) {
-    gameData = savegame
-  }
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-    .then(() => console.log('Service Worker registered'))
-    .catch(err => console.error('SW registration failed:', err));
+    music: 0,
+    musicPerClick: 1,
+    mps: 0
 }
+
+const musicBoxButton = document.getElementById("musicBoxButton");
+musicBoxButton.disabled = true;
+musicBoxButton.style.backgroundColor = "grey";
+
+// Function to check and update the Music Box button state
+function updateMusicBoxButton() {
+    const musicBoxButton = document.getElementById("musicBoxButton");
+    if (gameData.music < 10) {
+        musicBoxButton.disabled = true;
+        musicBoxButton.style.backgroundColor = "grey";
+    } else {
+        musicBoxButton.disabled = false;
+        musicBoxButton.style.backgroundColor = ""; // Optional: reset the button color
+    }
+}
+
+function makeMusic() {
+    gameData.music += gameData.musicPerClick;
+    document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
+    updateMusicBoxButton();  // Call to update button state whenever music changes
+}
+
+function musicBox() {
+    if (gameData.music >= 10) {  // Ensure music is at least 10 before subtracting
+        gameData.music -= 10;
+        gameData.mps += 1;
+        document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
+        document.getElementById("musicAutoMade").textContent = `${gameData.mps} Mps`;
+        updateMusicBoxButton();  // Call to update button state after using the music
+    }
+}
+
+// Function to increase music automatically
+function autoGenerateMusic() {
+    gameData.music += gameData.mps;
+    document.getElementById("musicMade").textContent = `${gameData.music} Music Made`;
+    updateMusicBoxButton();  // Call to update button state whenever music changes
+}
+
+// Set an interval to increase music every second based on mps
+setInterval(autoGenerateMusic, 1000); // Every 1000 milliseconds (1 second)
