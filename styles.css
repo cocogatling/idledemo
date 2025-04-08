@@ -17,12 +17,12 @@ button {
 /* Media query for desktop */
 @media (min-width: 1500px) {
   body {
-    font-size: 8px;  /* Set a fixed font size for desktop */
-    padding: 10px;
+    font-size: 12px;  /* Set a fixed font size for desktop */
+    padding: 20px;
   }
 
   button {
-    font-size: 8px;  /* Adjust button size for larger screens */
+    font-size: 12px;  /* Adjust button size for larger screens */
     padding: 10px 20px;
     margin: 10px;
   }
